@@ -5,7 +5,9 @@ library(tidyverse)
 library(prophet)
 
 # Carregar dados 
-df <- df %>% rename(ds = data, y = valor)
+df <- read_csv("data/serie.csv") %>% 
+  rename(ds = data, y = valor) %>% 
+  arrange(ds)
 glimpse(df)
 
 
@@ -16,8 +18,8 @@ df %>%
   group_by(mes, ano) %>% 
   summarise(y = mean(y)) %>%
   ggplot(aes(x = mes, y = y, group = ano, col=ano)) +
-  geom_line()
-
+  geom_line() + 
+  geom_point() 
 
 
 # Datas Sazonais
@@ -30,7 +32,6 @@ holiday <- data_frame(
   ,lower_window = -5
   ,upper_window = 2
 )
-
 
 
 # Predicao
