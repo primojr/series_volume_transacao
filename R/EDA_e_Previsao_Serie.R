@@ -5,8 +5,7 @@ library(tidyverse)
 library(prophet)
 
 # Carregar dados 
-df <- read_csv("data/serie.csv") %>% 
-  rename(ds = data, y = valor)
+df <- df %>% rename(ds = data, y = valor)
 glimpse(df)
 
 
@@ -25,18 +24,17 @@ df %>%
 library(dplyr)
 
 # BF
-bf <- c(str_c("2020-11-",c(23:30)), str_c("2021-11-",c(22:29)))
 holiday <- data_frame(
    holiday = 'bf'
-  ,ds = as.Date(bf)
-  ,lower_window = 0
-  ,upper_window = 1
+  ,ds = as.Date(c('2021-11-27','2020-11-26'))
+  ,lower_window = -5
+  ,upper_window = 2
 )
 
 
 
+# Predicao
 model <- prophet(df, holidays = holiday)
-
 future <- make_future_dataframe(model, periods = 20)
 forecast <- predict(model, future)
 
@@ -44,4 +42,5 @@ forecast <- predict(model, future)
 # polt
 dyplot.prophet(model, forecast)
 prophet_plot_components(model, forecast)
+
 
